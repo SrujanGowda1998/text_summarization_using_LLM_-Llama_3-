@@ -72,18 +72,12 @@ def biography(input_text, word_per_chunk=1000, output_file="summarized_document.
         for chunk in chunks:
             summary += summarize_chunk(summarizer, chunk) + "\n"
         total_tokens = len(summary.split())
-        if total_tokens <= 600: #mistralai/Mixtral-8x7B-Instruct-v0.1, togethercomputer/StripedHyena-Nous-7B 
-        # if total_tokens > 490: #snorkelai/Snorkel-Mistral-PairRM-DPO, mistralai/Mistral-7B-Instruct-v0.2
-        # if total_tokens > 400: #upstage/SOLAR-10.7B-Instruct-v1.0
+        if total_tokens <= 600:
             break
         biography = summary
 
-    summary = generate_biography(summarizer, summary)
-    # summary = improve_coherence(summarizer, summary)
+    
     summary = remove_incomplete_sentence(summary)
-    # new_doc = docx.Document()
-    # new_doc.add_paragraph(summary)
-    # new_doc.save(output_file)
     return summary
 
 

@@ -4,13 +4,13 @@ from docx import Document
 import io
 
 # This must be the first Streamlit command used.
-st.set_page_config(page_title="German Biography Generator", layout="wide")
+st.set_page_config(page_title="Text Summarizer", layout="wide")
 
 # Custom header with HTML and CSS
 header_html = """
-    <div style="background-color:#618264; padding:10px; border-radius:10px">
-    <h1 style="color:white; text-align:center;">German Biography Generator</h1>
-    <p style="color:white; text-align:center;">We generate short biographies in German language using interview text of any length. Please upload the interview text in Word format to generate biography of the interviewee.</p>
+    <div style="background-color:#47b8d6; padding:10px; border-radius:10px">
+    <h1 style="color:white; text-align:center;">Text Summarizer</h1>
+    <p style="color:white; text-align:center;">Upload a text file of any length and get a short summary within seconds.</p>
     </div>
     """
 st.markdown(header_html, unsafe_allow_html=True)
@@ -42,27 +42,27 @@ if 'biography_generated' not in st.session_state:
 if not st.session_state.biography_generated:
     uploaded_file = st.file_uploader("Choose a Word file", type=['docx'], key="file_uploader")
     if uploaded_file is not None:
-        with st.spinner('Processing the document and generating biography...'):
+        with st.spinner('Processing the document and generating the summary...'):
             document_text = read_text_from_docx(uploaded_file)
             biography_text = biography(document_text)
             st.session_state.biography_text = biography_text  # Store biography text in session state
             st.session_state.biography_generated = True
             st.experimental_rerun()
 else:
-    st.success("Biography generated successfully.")
+    st.success("Summary generated successfully.")
     
     # Add a heading for the biography preview
     st.markdown("""
-        <h2 style='text-align: left; margin-top: 20px;'>Biography</h2>
+        <h2 style='text-align: left; margin-top: 20px;'>Summary</h2>
         """, unsafe_allow_html=True)
     
     st.write(st.session_state.biography_text)
     doc_io = create_word_document(st.session_state.biography_text)
-    st.download_button(label="Download Biography in Word Format",
+    st.download_button(label="Download summary in Word Format",
                        data=doc_io,
-                       file_name="biography.docx",
+                       file_name="Summary.docx",
                        mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document")
-    if st.button("Generate new biography"):
+    if st.button("Generate new summary"):
         st.session_state.biography_generated = False
         st.session_state.biography_text = ""
         st.experimental_rerun()
